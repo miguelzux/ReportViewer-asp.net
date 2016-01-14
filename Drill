@@ -1,0 +1,18 @@
+protected void ReportViewer1_Drillthrough(object sender, DrillthroughEventArgs e)
+        {
+          
+            LocalReport localreport = (LocalReport)e.Report;
+            IList<ReportParameter> list = localreport.OriginalParametersToDrillthrough;
+            ReportParameterInfoCollection parentparameters = e.Report.GetParameters();
+            string type = e.ReportPath.ToString();
+            //id que recojes del report al pinchar en el.
+               int Id = parentparameters[2].Values[0];
+                System.Data.DataSet Level1DataSet = new System.Data.DataSet();
+                Level1DataSet = SqlHelper.ExecuteDataset(sqlconn, "Nombre de tu procedimiento o consulta",  Id);
+                ReportDataSource level1datasource = new ReportDataSource("dataset de tu report", Level1DataSet.Tables[0]);
+                localreport.DataSources.Clear();
+                localreport.DataSources.Add(level1datasource);
+                localreport.Refresh();
+            
+        }
+
